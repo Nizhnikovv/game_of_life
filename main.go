@@ -28,9 +28,9 @@ func ParseJSONSeed(seed io.Reader) ([][]bool, error) {
 	xLen := maxCoords.X - baseCoords.X
 	yLen := maxCoords.Y - baseCoords.Y
 
-	grid := make([][]bool, xLen)
+	grid := make([][]bool, xLen+1)
 	for i := range grid {
-		grid[i] = make([]bool, yLen)
+		grid[i] = make([]bool, yLen+1)
 	}
 
 	for _, coord := range coords {
@@ -44,5 +44,18 @@ func ParseJSONSeed(seed io.Reader) ([][]bool, error) {
 }
 
 func main() {
-	println("hello world")
+	seedFileName := flag.String("seed-file", "seed.json", "seed file in json format")
+	flag.Parse()
+
+	seedFile, err := os.Open(*seedFileName)
+	if err != nil {
+		panic(err)
+	}
+
+	grid, err := ParseJSONSeed(seedFile)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(grid)
 }
