@@ -2,12 +2,32 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
+	"os"
+)
+
+const (
+	liveCell = "██"
+	deadCell = "  "
 )
 
 type Coords struct {
 	X, Y int
+}
+
+func PrettyPrintGrid(grid [][]bool) {
+	for i := len(grid) - 1; i >= 0; i-- {
+		for _, cell := range grid[i] {
+			if cell {
+				fmt.Print(liveCell)
+			} else {
+				fmt.Print(deadCell)
+			}
+		}
+		fmt.Print("\n")
+	}
 }
 
 func ParseJSONSeed(seed io.Reader) ([][]bool, error) {
@@ -28,16 +48,16 @@ func ParseJSONSeed(seed io.Reader) ([][]bool, error) {
 	xLen := maxCoords.X - baseCoords.X
 	yLen := maxCoords.Y - baseCoords.Y
 
-	grid := make([][]bool, xLen+1)
+	grid := make([][]bool, yLen+1)
 	for i := range grid {
-		grid[i] = make([]bool, yLen+1)
+		grid[i] = make([]bool, xLen+1)
 	}
 
 	for _, coord := range coords {
 		relX := coord.X - baseCoords.X
 		relY := coord.Y - baseCoords.Y
 
-		grid[relX][relY] = true
+		grid[relY][relX] = true
 	}
 
 	return grid, nil
@@ -57,5 +77,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(grid)
+	PrettyPrintGrid(grid)
 }
