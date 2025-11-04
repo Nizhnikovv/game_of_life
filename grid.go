@@ -86,7 +86,12 @@ func (g Grid) EmptyCopy() Grid {
 
 // works with underlying array but changes length
 func (g Grid) Trim() Grid {
+	if len(g) == 0 || len(g[0]) == 0 {
+		return g
+	}
+
 	var minX, maxX, minY, maxY int
+	minX, minY = len(g), len(g[0])
 	for x := range g {
 		for y := range g[x] {
 			if g[x][y] {
@@ -97,6 +102,11 @@ func (g Grid) Trim() Grid {
 			}
 		}
 	}
+
+	if minX > maxX || minY > maxY {
+		return [][]bool{}
+	}
+
 	g = g[minX : maxX+1]
 	for i := range g {
 		g[i] = g[i][minY : maxY+1]

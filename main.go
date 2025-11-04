@@ -48,17 +48,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	grid = grid.Trim()
-	grid = grid.Pad(1)
-	grid.PrettyPrint(os.Stdout)
-
-	for range 1 {
-		grid = doStep(grid)
+	for range 10000 {
 		grid = grid.Trim()
 		grid = grid.Pad(1)
+		grid = doStep(grid)
 		grid.PrettyPrint(os.Stdout)
 	}
-	grid = grid.Trim()
-	grid.PrettyPrint(os.Stdout)
-
 }
